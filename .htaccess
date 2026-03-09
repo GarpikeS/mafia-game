@@ -1,0 +1,37 @@
+AddType text/css .css
+AddType application/javascript .js
+AddType text/html .html
+
+# Security headers
+Header set X-Content-Type-Options "nosniff"
+Header set X-Frame-Options "DENY"
+Header set X-XSS-Protection "1; mode=block"
+Header set Referrer-Policy "strict-origin-when-cross-origin"
+Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://api.dicebear.com data:; connect-src 'self' ws: wss:"
+
+# Short cache for static assets (10 min instead of 45 days)
+<FilesMatch "\.(js|css|html)$">
+  Header set Cache-Control "public, max-age=600"
+</FilesMatch>
+
+RewriteEngine On
+RewriteBase /
+
+# WebSocket proxy for socket.io
+RewriteCond %{HTTP:Upgrade} =websocket [NC]
+RewriteCond %{REQUEST_URI} ^/socket\.io/ [NC]
+RewriteRule ^(.*) ws://127.0.0.1:5000/$1 [P,L]
+
+# HTTP proxy for socket.io (polling fallback)
+RewriteCond %{REQUEST_URI} ^/socket\.io/ [NC]
+RewriteRule ^(.*) http://127.0.0.1:5000/$1 [P,L]
+
+# API proxy to Node.js server
+RewriteCond %{REQUEST_URI} ^/api/ [NC]
+RewriteRule ^(.*) http://127.0.0.1:5000/$1 [P,L]
+
+# SPA routing
+RewriteRule ^index\.html$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]

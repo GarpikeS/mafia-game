@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мафия - Онлайн игра</title>
+  <meta name="description" content="Онлайн-мафия с ведущим, ботами и 6 ролями. Бесплатно, без регистрации.">
+  <link rel="stylesheet" href="/style.css?v=12">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body data-phase="menu">
+  <div class="container">
+    <!-- Атмосферные слои -->
+    <div class="atmosphere" aria-hidden="true">
+      <div class="stars"></div>
+      <div class="fog fog-1"></div>
+      <div class="fog fog-2"></div>
+      <div class="city-silhouette"></div>
+      <div class="city-windows"></div>
+      <div class="vignette"></div>
+    </div>
+
+    <!-- Красная вспышка при убийстве -->
+    <div id="red-flash" class="red-flash" aria-hidden="true"></div>
+
+    <!-- Главное меню -->
+    <div id="menu-screen" class="screen active">
+      <div class="logo">
+        <div class="logo-emblem"></div>
+        <h1>МАФИЯ</h1>
+        <div class="logo-divider"><span></span></div>
+        <p class="tagline">Город засыпает...</p>
+      </div>
+
+      <div class="menu-form">
+        <input type="text" id="player-name" placeholder="Введите ваше имя" maxlength="20" aria-label="Ваше имя" autocomplete="off">
+
+        <div class="menu-buttons">
+          <button id="create-room-btn" class="btn btn-primary">
+            <span class="btn-icon">+</span>
+            Создать комнату
+          </button>
+
+          <div class="join-section">
+            <input type="text" id="room-code" placeholder="Код комнаты" maxlength="6" aria-label="Код комнаты" autocomplete="off">
+            <button id="join-room-btn" class="btn btn-secondary">Войти</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="rules-hint">
+        <button id="show-rules" class="btn-link">Как играть?</button>
+      </div>
+    </div>
+
+    <!-- Лобби -->
+    <div id="lobby-screen" class="screen">
+      <div class="lobby-topbar">
+        <button id="lobby-back-btn" class="btn-icon-only" title="Назад в меню" aria-label="Назад в меню">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M19 12H5"></path>
+            <path d="M12 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <div class="lobby-topbar-title">
+          <h2>Комната: <span id="room-id-display"></span></h2>
+          <span id="lobby-role-badge" class="lobby-role-badge" style="display:none;"></span>
+        </div>
+        <button id="copy-code" class="btn-icon-only" title="Копировать ссылку" aria-label="Копировать ссылку">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="lobby-tabs" role="tablist" aria-label="Разделы лобби">
+        <button class="lobby-tab active" data-tab="players" role="tab" aria-selected="true" aria-controls="tab-players">Игроки</button>
+        <button class="lobby-tab" data-tab="rules" role="tab" aria-selected="false" aria-controls="tab-rules">Правила</button>
+        <button class="lobby-tab" data-tab="characters" role="tab" aria-selected="false" aria-controls="tab-characters">Персонажи</button>
+      </div>
+
+      <!-- Вкладка: Игроки -->
+      <div class="lobby-tab-content active" id="tab-players" role="tabpanel" aria-label="Игроки">
+        <div id="host-controls" class="host-controls" style="display:none;">
+          <button id="add-bot-btn" class="btn btn-secondary">
+            <span class="btn-icon">🤖</span> Добавить бота
+          </button>
+          <button id="close-room-btn" class="btn btn-secondary btn-close-room">
+            <span class="btn-icon">✕</span> Закрыть комнату
+          </button>
+        </div>
+
+        <!-- Настройка ролей (только для ведущего) -->
+        <div id="role-config" class="role-config" style="display:none;">
+          <h3>Настройка ролей</h3>
+          <div class="role-config-row">
+            <span class="role-config-label">🔪 Мафия</span>
+            <div class="role-config-controls">
+              <button class="role-config-btn" data-role="mafia" data-action="minus">−</button>
+              <span id="rc-mafia" class="role-config-value">1</span>
+              <button class="role-config-btn" data-role="mafia" data-action="plus">+</button>
+            </div>
+          </div>
+          <div class="role-config-row">
+            <span class="role-config-label">🎩 Крёстный отец</span>
+            <div class="role-config-controls">
+              <button class="role-config-btn" data-role="godfather" data-action="minus">−</button>
+              <span id="rc-godfather" class="role-config-value">0</span>
+              <button class="role-config-btn" data-role="godfather" data-action="plus">+</button>
+            </div>
+          </div>
+          <div class="role-config-row">
+            <span class="role-config-label">🪓 Маньяк</span>
+            <div class="role-config-controls">
+              <button class="role-config-btn" data-role="maniac" data-action="minus">−</button>
+              <span id="rc-maniac" class="role-config-value">0</span>
+              <button class="role-config-btn" data-role="maniac" data-action="plus">+</button>
+            </div>
+          </div>
+          <div class="role-config-row">
+            <span class="role-config-label">💉 Доктор</span>
+            <div class="role-config-controls">
+              <button class="role-config-btn" data-role="doctor" data-action="minus">−</button>
+              <span id="rc-doctor" class="role-config-value">1</span>
+              <button class="role-config-btn" data-role="doctor" data-action="plus">+</button>
+            </div>
+          </div>
+          <div class="role-config-row">
+            <span class="role-config-label">🔍 Детектив</span>
+            <div class="role-config-controls">
+              <button class="role-config-btn" data-role="detective" data-action="minus">−</button>
+              <span id="rc-detective" class="role-config-value">1</span>
+              <button class="role-config-btn" data-role="detective" data-action="plus">+</button>
+            </div>
+          </div>
+          <div class="role-config-row">
+            <span class="role-config-label">🏠 Мирные</span>
+            <span id="rc-civilian" class="role-config-value civilian-auto">авто</span>
+          </div>
+        </div>
+
+        <div class="players-grid" id="lobby-players"></div>
+
+        <div class="lobby-footer">
+          <p class="player-count">Игроков: <span id="player-count">0</span> (минимум 4)</p>
+          <button id="start-game-btn" class="btn btn-primary btn-large" disabled>Начать игру</button>
+        </div>
+      </div>
+
+      <!-- Вкладка: Правила -->
+      <div class="lobby-tab-content" id="tab-rules" role="tabpanel" aria-label="Правила">
+        <div class="rules-section">
+          <h3>🌙 Ночь</h3>
+          <p>Город засыпает. Мафия выбирает жертву, доктор решает кого спасти, детектив проверяет подозреваемого.</p>
+        </div>
+        <div class="rules-section">
+          <h3>☀️ День</h3>
+          <p>Город просыпается. Игроки обсуждают, кто может быть мафией, и голосуют за изгнание подозреваемого.</p>
+        </div>
+        <div class="rules-section">
+          <h3>🏆 Победа</h3>
+          <p><strong>Мафия побеждает,</strong> когда мафии столько же или больше, чем мирных жителей.</p>
+          <p><strong>Мирные побеждают,</strong> когда вся мафия уничтожена.</p>
+        </div>
+      </div>
+
+      <!-- Вкладка: Персонажи -->
+      <div class="lobby-tab-content" id="tab-characters" role="tabpanel" aria-label="Персонажи">
+        <div class="characters-grid">
+          <div class="character-card mafia">
+            <div class="character-icon">🔪</div>
+            <div class="character-info">
+              <strong>Мафия</strong>
+              <p>Каждую ночь выбирает жертву для убийства. Цель — уничтожить всех мирных жителей. Знает других членов мафии.</p>
+            </div>
+          </div>
+          <div class="character-card godfather">
+            <div class="character-icon">🎩</div>
+            <div class="character-info">
+              <strong>Крёстный отец</strong>
+              <p>Глава мафии. Действует как мафия, но при проверке детективом выглядит мирным жителем. Знает других членов мафии.</p>
+            </div>
+          </div>
+          <div class="character-card maniac">
+            <div class="character-icon">🪓</div>
+            <div class="character-info">
+              <strong>Маньяк</strong>
+              <p>Независимый убийца. Каждую ночь убивает жертву. Доктор не может спасти от маньяка. Побеждает, если остаётся последним живым.</p>
+            </div>
+          </div>
+          <div class="character-card doctor">
+            <div class="character-icon">💉</div>
+            <div class="character-info">
+              <strong>Доктор</strong>
+              <p>Каждую ночь может спасти одного игрока от мафии. Не может спасти одного и того же игрока дважды подряд.</p>
+            </div>
+          </div>
+          <div class="character-card detective">
+            <div class="character-icon">🔍</div>
+            <div class="character-info">
+              <strong>Детектив</strong>
+              <p>Каждую ночь может проверить одного игрока и узнать, является ли он мафией или мирным жителем.</p>
+            </div>
+          </div>
+          <div class="character-card civilian">
+            <div class="character-icon">🏠</div>
+            <div class="character-info">
+              <strong>Мирный житель</strong>
+              <p>Не имеет специальных способностей. Днём участвует в обсуждении и голосует за изгнание подозреваемых.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Игровой экран (для обычных игроков) -->
+    <div id="game-screen" class="screen">
+      <div class="game-header">
+        <div class="phase-info">
+          <span id="phase-icon" class="phase-icon">🌙</span>
+          <span id="phase-text">Ночь 1</span>
+        </div>
+      </div>
+
+      <div class="game-message" id="game-message" aria-live="polite">
+        Город засыпает...
+      </div>
+
+      <!-- Мобильные вкладки (видны только на телефонах) -->
+      <div class="game-mobile-tabs" role="tablist" aria-label="Игровые панели">
+        <button class="game-mobile-tab active" data-panel="players" role="tab" aria-selected="true">Игроки</button>
+        <button class="game-mobile-tab" data-panel="chat" role="tab" aria-selected="false">Чат</button>
+      </div>
+
+      <div class="game-content">
+        <div class="players-section" data-game-panel="players">
+          <h3>Игроки</h3>
+          <div class="players-list" id="game-players"></div>
+        </div>
+
+        <div class="chat-section" data-game-panel="chat">
+          <div class="chat-messages" id="chat-messages" aria-live="polite" aria-label="Чат"></div>
+          <div class="chat-input-container">
+            <input type="text" id="chat-input" placeholder="Сообщение..." maxlength="200" aria-label="Сообщение в чат">
+            <button id="send-message" class="btn btn-primary">Отправить</button>
+          </div>
+        </div>
+
+        <!-- Карта роли игрока -->
+        <div class="my-card-section">
+          <p class="my-card-label">Ваша карта</p>
+          <div class="my-card-scene">
+            <div class="my-card-inner" id="my-card-inner">
+              <div class="my-card-front">
+                <div class="my-card-icon" id="my-card-icon"></div>
+                <div class="my-card-title" id="my-card-title"></div>
+                <div class="my-card-desc" id="my-card-desc"></div>
+              </div>
+              <div class="my-card-back">
+                <div class="my-card-question">?</div>
+              </div>
+            </div>
+          </div>
+          <p class="my-card-tip">Нажмите, чтобы подсмотреть</p>
+        </div>
+      </div>
+
+      <div class="action-panel" id="action-panel">
+        <p id="action-hint">Выберите игрока</p>
+        <button id="confirm-action" class="btn btn-danger" disabled>Подтвердить</button>
+        <button id="skip-action" class="btn btn-secondary">Пропустить</button>
+      </div>
+    </div>
+
+    <!-- Панель ведущего -->
+    <div id="narrator-screen" class="screen">
+      <div class="game-header">
+        <div class="phase-info">
+          <span id="narrator-phase-icon" class="phase-icon">🎭</span>
+          <span id="narrator-phase-text">Лобби</span>
+        </div>
+        <div class="role-badge narrator">
+          <span>Ведущий</span>
+        </div>
+      </div>
+
+      <div class="game-message" id="narrator-game-message" aria-live="polite">
+        Ожидание начала игры...
+      </div>
+
+      <!-- Мобильные вкладки ведущего (видны только на телефонах) -->
+      <div class="narrator-mobile-tabs" role="tablist" aria-label="Панели ведущего">
+        <button class="narrator-mobile-tab active" data-narrator-tab="players" role="tab" aria-selected="true">Игроки</button>
+        <button class="narrator-mobile-tab" data-narrator-tab="log" role="tab" aria-selected="false">Лог</button>
+        <button class="narrator-mobile-tab" data-narrator-tab="chat" role="tab" aria-selected="false">Чат</button>
+      </div>
+
+      <div class="narrator-content">
+        <div class="narrator-players-section" data-narrator-panel="players">
+          <h3>Игроки и роли</h3>
+          <div class="narrator-players-list" id="narrator-players"></div>
+        </div>
+
+        <div class="narrator-log-section" data-narrator-panel="log">
+          <h3>Лог действий</h3>
+          <div class="narrator-log" id="narrator-log"></div>
+        </div>
+
+        <div class="chat-section" data-narrator-panel="chat">
+          <div class="chat-messages" id="narrator-chat-messages" aria-live="polite" aria-label="Чат ведущего"></div>
+          <div class="chat-input-container">
+            <input type="text" id="narrator-chat-input" placeholder="Сообщение всем..." maxlength="200" aria-label="Сообщение всем">
+            <button id="narrator-send-message" class="btn btn-primary">Отправить</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-panel">
+        <button id="advance-phase-btn" class="btn btn-danger">Следующая фаза</button>
+        <button id="end-game-btn" class="btn btn-secondary">Завершить игру</button>
+      </div>
+    </div>
+
+    <!-- Экран результатов -->
+    <div id="result-screen" class="screen">
+      <div class="result-content">
+        <h2 id="result-title">Игра окончена</h2>
+        <p id="result-message"></p>
+
+        <div class="final-roles">
+          <h3>Роли игроков:</h3>
+          <div id="final-players"></div>
+        </div>
+
+        <button id="back-to-menu" class="btn btn-primary btn-large">В главное меню</button>
+      </div>
+    </div>
+
+    <!-- Оверлей карточки роли -->
+    <div id="role-card-overlay" class="role-card-overlay" role="dialog" aria-modal="true" aria-label="Ваша роль">
+      <button id="role-card-close" class="role-card-close" aria-label="Закрыть карту роли">✕ Закрыть</button>
+      <div class="role-card-scene">
+        <div class="role-card-inner" id="role-card-inner">
+          <div class="role-card-front">
+            <div class="role-card-icon" id="role-card-icon"></div>
+            <div class="role-card-title" id="role-card-title"></div>
+            <div class="role-card-desc" id="role-card-desc"></div>
+          </div>
+          <div class="role-card-back">
+            <div class="role-card-question">?</div>
+          </div>
+        </div>
+      </div>
+      <p class="role-card-hint">Нажмите карточку чтобы перевернуть, или закройте чтобы перейти к игре</p>
+    </div>
+
+    <!-- Модальное подтверждение -->
+    <div id="confirm-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
+      <div class="confirm-modal-content">
+        <div class="confirm-modal-icon" id="confirm-modal-icon">⚠️</div>
+        <h3 id="confirm-modal-title">Подтверждение</h3>
+        <p id="confirm-modal-text">Вы уверены?</p>
+        <div class="confirm-modal-buttons">
+          <button id="confirm-modal-yes" class="btn btn-danger">Да, завершить</button>
+          <button id="confirm-modal-no" class="btn btn-secondary">Отмена</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Модальное окно правил -->
+    <div id="rules-modal" class="modal" role="dialog" aria-modal="true" aria-label="Правила игры">
+      <div class="modal-content">
+        <button class="modal-close" aria-label="Закрыть">&times;</button>
+        <h2>Правила игры "Мафия"</h2>
+
+        <div class="rules-section">
+          <h3>🎭 Роли</h3>
+          <div class="role-card mafia">
+            <strong>Мафия</strong>
+            <p>Каждую ночь выбирает жертву. Цель — уничтожить всех мирных жителей.</p>
+          </div>
+          <div class="role-card godfather">
+            <strong>Крёстный отец</strong>
+            <p>Глава мафии. Действует как мафия, но детектив видит его как мирного жителя.</p>
+          </div>
+          <div class="role-card maniac">
+            <strong>Маньяк</strong>
+            <p>Независимый убийца. Убивает каждую ночь. Доктор не спасает от него. Побеждает последним.</p>
+          </div>
+          <div class="role-card doctor">
+            <strong>Доктор</strong>
+            <p>Каждую ночь может спасти одного игрока от мафии.</p>
+          </div>
+          <div class="role-card detective">
+            <strong>Детектив</strong>
+            <p>Каждую ночь может проверить одного игрока и узнать, мафия он или нет.</p>
+          </div>
+          <div class="role-card civilian">
+            <strong>Мирный житель</strong>
+            <p>Днём голосует за изгнание подозреваемых.</p>
+          </div>
+        </div>
+
+        <div class="rules-section">
+          <h3>🌙 Ночь</h3>
+          <p>Мафия выбирает жертву, доктор лечит, детектив проверяет.</p>
+        </div>
+
+        <div class="rules-section">
+          <h3>☀️ День</h3>
+          <p>Игроки обсуждают и голосуют за изгнание подозреваемого.</p>
+        </div>
+
+        <div class="rules-section">
+          <h3>🏆 Победа</h3>
+          <p><strong>Мафия:</strong> когда мафии столько же, сколько мирных.<br>
+          <strong>Мирные:</strong> когда вся мафия уничтожена.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overlay переподключения -->
+    <div id="reconnect-overlay" class="reconnect-overlay" role="alert" aria-live="assertive">
+      <div class="reconnect-content">
+        <div class="reconnect-spinner" aria-hidden="true"></div>
+        <p class="reconnect-text">Переподключение...</p>
+        <p class="reconnect-hint">Проверьте интернет-соединение</p>
+        <button id="reconnect-reload" class="btn btn-secondary" style="margin-top:20px;display:none;">Обновить страницу</button>
+      </div>
+    </div>
+
+    <!-- Индикатор соединения -->
+    <div id="connection-indicator" class="connection-indicator" title="Соединение" aria-label="Статус соединения">
+      <span class="connection-dot" aria-hidden="true"></span>
+    </div>
+
+    <!-- Уведомления -->
+    <div id="notification" class="notification" role="status" aria-live="polite"></div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="/game.js?v=13"></script>
+</body>
+</html>

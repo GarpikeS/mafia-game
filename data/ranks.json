@@ -1,0 +1,92 @@
+{
+  "version": "1.0",
+  "startingMMR": 1000,
+  "mmrChanges": {
+    "winTown": 25,
+    "winMafia": 30,
+    "winNeutral": 35,
+    "loss": -20
+  },
+  "ranks": [
+    {
+      "id": "herald",
+      "name": "Глашатай",
+      "nameEn": "Herald",
+      "minMMR": 0,
+      "maxMMR": 499,
+      "color": "#8D6E63",
+      "icon": "scroll",
+      "description": "Начинающий игрок. Путь к мастерству только начинается."
+    },
+    {
+      "id": "guardian",
+      "name": "Страж",
+      "nameEn": "Guardian",
+      "minMMR": 500,
+      "maxMMR": 999,
+      "color": "#78909C",
+      "icon": "shield",
+      "description": "Освоил базовые механики. Готов к более сложным играм."
+    },
+    {
+      "id": "crusader",
+      "name": "Крестоносец",
+      "nameEn": "Crusader",
+      "minMMR": 1000,
+      "maxMMR": 1499,
+      "color": "#66BB6A",
+      "icon": "sword",
+      "description": "Уверенный игрок. Понимает стратегии обеих сторон."
+    },
+    {
+      "id": "archon",
+      "name": "Архонт",
+      "nameEn": "Archon",
+      "minMMR": 1500,
+      "maxMMR": 1999,
+      "color": "#42A5F5",
+      "icon": "gem",
+      "description": "Опытный стратег. Умеет читать поведение других игроков."
+    },
+    {
+      "id": "legend",
+      "name": "Легенда",
+      "nameEn": "Legend",
+      "minMMR": 2000,
+      "maxMMR": 2499,
+      "color": "#AB47BC",
+      "icon": "star",
+      "description": "Мастер блефа и дедукции. Его боятся и уважают."
+    },
+    {
+      "id": "ancient",
+      "name": "Титан",
+      "nameEn": "Ancient",
+      "minMMR": 2500,
+      "maxMMR": 2999,
+      "color": "#FF7043",
+      "icon": "crown",
+      "description": "Элитный игрок. Контролирует ход игры с первых минут."
+    },
+    {
+      "id": "divine",
+      "name": "Божественный",
+      "nameEn": "Divine",
+      "minMMR": 3000,
+      "maxMMR": 3499,
+      "color": "#FFD54F",
+      "icon": "sun",
+      "description": "Почти на вершине. Каждое его слово может изменить исход игры."
+    },
+    {
+      "id": "immortal",
+      "name": "Бессмертный",
+      "nameEn": "Immortal",
+      "minMMR": 3500,
+      "maxMMR": null,
+      "color": "#F44336",
+      "icon": "flame",
+      "description": "Вершина мастерства. Легенда среди игроков в Мафию."
+    }
+  ]
+}

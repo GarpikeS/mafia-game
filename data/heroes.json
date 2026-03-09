@@ -1,0 +1,184 @@
+{
+  "version": "1.0",
+  "heroes": [
+    {
+      "id": "godfather",
+      "name": "Крёстный отец",
+      "nameEn": "Godfather",
+      "faction": "mafia",
+      "ability": "Убийство + выглядит невиновным для детектива",
+      "description": "Глава мафии. Его слово — закон в ночном городе. Умеет скрывать свою истинную природу.",
+      "complexity": 2,
+      "dotaAnalogy": "Phantom Assassin",
+      "icon": "skull-crossbones",
+      "passive": "appearsInnocent"
+    },
+    {
+      "id": "hitman",
+      "name": "Киллер",
+      "nameEn": "Hitman",
+      "faction": "mafia",
+      "ability": "Убийство цели, раскрывает себя при провале",
+      "description": "Хладнокровный исполнитель. Точен в своих действиях, но каждый промах может стать последним.",
+      "complexity": 2,
+      "dotaAnalogy": "Bounty Hunter",
+      "icon": "crosshair",
+      "passive": "revealOnFail"
+    },
+    {
+      "id": "consort",
+      "name": "Сообщница",
+      "nameEn": "Consort",
+      "faction": "mafia",
+      "ability": "Блокирует ночное действие одного игрока",
+      "description": "Мастер манипуляций. Отвлекает ключевых игроков, лишая их возможности действовать.",
+      "complexity": 3,
+      "dotaAnalogy": "Silencer",
+      "icon": "ban",
+      "passive": null
+    },
+    {
+      "id": "framer",
+      "name": "Подставщик",
+      "nameEn": "Framer",
+      "faction": "mafia",
+      "ability": "Подставляет цель — она выглядит мафией для детектива",
+      "description": "Мастер улик. Подбрасывает компрометирующие доказательства невиновным.",
+      "complexity": 3,
+      "dotaAnalogy": "Morphling",
+      "icon": "mask",
+      "passive": null
+    },
+    {
+      "id": "sheriff",
+      "name": "Шериф",
+      "nameEn": "Sheriff",
+      "faction": "town",
+      "ability": "Проверяет одного игрока за ночь (мафия/мирный)",
+      "description": "Страж закона. Каждую ночь ведёт расследование, чтобы раскрыть тёмные тайны города.",
+      "complexity": 1,
+      "dotaAnalogy": "Zeus",
+      "icon": "search",
+      "passive": null
+    },
+    {
+      "id": "doctor",
+      "name": "Доктор",
+      "nameEn": "Doctor",
+      "faction": "town",
+      "ability": "Лечит одного игрока за ночь",
+      "description": "Целитель в тени. Спасает жизни тех, кого мафия приговорила к смерти.",
+      "complexity": 1,
+      "dotaAnalogy": "Omniknight",
+      "icon": "heart-pulse",
+      "passive": null
+    },
+    {
+      "id": "bodyguard",
+      "name": "Телохранитель",
+      "nameEn": "Bodyguard",
+      "faction": "town",
+      "ability": "Защищает цель, погибает если цель атакована",
+      "description": "Готов отдать жизнь за защиту невинных. Его щит — последняя линия обороны.",
+      "complexity": 2,
+      "dotaAnalogy": "Treant Protector",
+      "icon": "shield",
+      "passive": "dieForTarget"
+    },
+    {
+      "id": "veteran",
+      "name": "Ветеран",
+      "nameEn": "Veteran",
+      "faction": "town",
+      "ability": "Убивает всех посетителей (3 использования)",
+      "description": "Старый солдат с боевым прошлым. Когда настороже — опасен для всех, кто приближается.",
+      "complexity": 3,
+      "dotaAnalogy": "Axe",
+      "icon": "swords",
+      "passive": null,
+      "charges": 3
+    },
+    {
+      "id": "spy",
+      "name": "Шпион",
+      "nameEn": "Spy",
+      "faction": "town",
+      "ability": "Видит кого мафия посещает ночью",
+      "description": "Тихий наблюдатель. Следит за передвижениями мафии под покровом ночи.",
+      "complexity": 2,
+      "dotaAnalogy": "Techies",
+      "icon": "eye",
+      "passive": null
+    },
+    {
+      "id": "mayor",
+      "name": "Мэр",
+      "nameEn": "Mayor",
+      "faction": "town",
+      "ability": "Голос считается x2 при голосовании (после раскрытия)",
+      "description": "Глава города. Может раскрыть свой статус, чтобы получить двойной голос.",
+      "complexity": 2,
+      "dotaAnalogy": "Invoker",
+      "icon": "landmark",
+      "passive": "doubleVote",
+      "requiresReveal": true
+    },
+    {
+      "id": "serial_killer",
+      "name": "Маньяк",
+      "nameEn": "Serial Killer",
+      "faction": "neutral",
+      "ability": "Убивает независимо каждую ночь",
+      "description": "Одиночка с тёмной целью. Охотится на всех без разбора — ни мафия, ни город ему не союзники.",
+      "complexity": 2,
+      "dotaAnalogy": "Lone Druid",
+      "icon": "skull",
+      "winCondition": "lastAlive"
+    },
+    {
+      "id": "jester",
+      "name": "Шут",
+      "nameEn": "Jester",
+      "faction": "neutral",
+      "ability": "Побеждает если его казнят на голосовании",
+      "description": "Безумец, жаждущий внимания. Его цель — быть казнённым. Провокации и обман — его оружие.",
+      "complexity": 3,
+      "dotaAnalogy": "Meepo",
+      "icon": "drama-masks",
+      "winCondition": "getLynched"
+    },
+    {
+      "id": "survivor",
+      "name": "Выживший",
+      "nameEn": "Survivor",
+      "faction": "neutral",
+      "ability": "Побеждает если жив в конце, 4 защитных жилета",
+      "description": "Ему всё равно кто победит. Главное — остаться в живых любой ценой.",
+      "complexity": 1,
+      "dotaAnalogy": "Wraith King",
+      "icon": "shield-half",
+      "winCondition": "survive",
+      "charges": 4
+    }
+  ],
+  "factions": {
+    "town": {
+      "name": "Город",
+      "nameEn": "Town",
+      "color": "#2ecc71",
+      "description": "Мирные жители. Цель — найти и уничтожить всю мафию."
+    },
+    "mafia": {
+      "name": "Мафия",
+      "nameEn": "Mafia",
+      "color": "#c41e3a",
+      "description": "Преступная организация. Цель — захватить контроль над городом."
+    },
+    "neutral": {
+      "name": "Нейтральные",
+      "nameEn": "Neutral",
+      "color": "#9b59b6",
+      "description": "Независимые игроки со своими уникальными целями."
+    }
+  }
+}

@@ -1,0 +1,2473 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-dark: #0a0a0f;
+  --bg-card: #12121a;
+  --bg-card-hover: #1a1a25;
+  --border-color: #2a2a3a;
+  --text-primary: #ffffff;
+  --text-secondary: #8a8a9a;
+  --accent-red: #c41e3a;
+  --accent-red-hover: #e52547;
+  --accent-gold: #d4af37;
+  --accent-blue: #4a90d9;
+  --accent-green: #2ecc71;
+  --accent-purple: #9b59b6;
+  --mafia-color: #c41e3a;
+  --godfather-color: #8b0000;
+  --maniac-color: #ff6600;
+  --doctor-color: #2ecc71;
+  --detective-color: #4a90d9;
+  --civilian-color: #8a8a9a;
+  --narrator-color: #9b59b6;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background: var(--bg-dark);
+  min-height: 100vh;
+  color: var(--text-primary);
+  overflow-x: hidden;
+  transition: background 2s ease;
+}
+
+/* === Фон по фазам === */
+body[data-phase="menu"] {
+  background: linear-gradient(180deg, #0a0a15 0%, #111128 50%, #0a0a0f 100%);
+}
+
+body[data-phase="lobby"] {
+  background: linear-gradient(180deg, #060d1f 0%, #0c1a3a 50%, #060d1f 100%);
+}
+
+body[data-phase="night"] {
+  background: linear-gradient(180deg, #050510 0%, #0a0a1e 50%, #060612 100%);
+}
+
+body[data-phase="day"] {
+  background: linear-gradient(180deg, #151525 0%, #1e1e38 50%, #151525 100%);
+}
+
+body[data-phase="ended"] {
+  background: linear-gradient(180deg, #0a0510 0%, #150a1e 50%, #0a0510 100%);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* === Атмосферные слои === */
+.atmosphere {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Звёзды */
+.stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  box-shadow:
+    12px 45px 1px 0px rgba(255,255,255,0.7),
+    67px 120px 1px 0px rgba(255,255,255,0.5),
+    134px 78px 1px 0px rgba(255,255,255,0.6),
+    200px 190px 1px 0px rgba(255,255,255,0.4),
+    245px 32px 1px 0px rgba(255,255,255,0.8),
+    312px 150px 1px 0px rgba(255,255,255,0.3),
+    378px 210px 1px 0px rgba(255,255,255,0.6),
+    420px 55px 1px 0px rgba(255,255,255,0.5),
+    489px 180px 1px 0px rgba(255,255,255,0.7),
+    534px 90px 1px 0px rgba(255,255,255,0.4),
+    590px 230px 1px 0px rgba(255,255,255,0.6),
+    645px 15px 1px 0px rgba(255,255,255,0.5),
+    712px 160px 1px 0px rgba(255,255,255,0.8),
+    778px 75px 1px 0px rgba(255,255,255,0.3),
+    834px 200px 1px 0px rgba(255,255,255,0.6),
+    890px 40px 1px 0px rgba(255,255,255,0.5),
+    945px 170px 1px 0px rgba(255,255,255,0.7),
+    1012px 100px 1px 0px rgba(255,255,255,0.4),
+    1078px 220px 1px 0px rgba(255,255,255,0.6),
+    1134px 60px 1px 0px rgba(255,255,255,0.5),
+    1200px 140px 1px 0px rgba(255,255,255,0.3),
+    1256px 30px 1px 0px rgba(255,255,255,0.7),
+    1312px 190px 1px 0px rgba(255,255,255,0.5),
+    1380px 80px 1px 0px rgba(255,255,255,0.6),
+    50px 300px 1px 0px rgba(255,255,255,0.4),
+    156px 340px 1px 0px rgba(255,255,255,0.5),
+    267px 280px 1px 0px rgba(255,255,255,0.7),
+    389px 310px 1px 0px rgba(255,255,255,0.3),
+    500px 350px 1px 0px rgba(255,255,255,0.6),
+    623px 290px 1px 0px rgba(255,255,255,0.5),
+    756px 330px 1px 0px rgba(255,255,255,0.4),
+    878px 270px 1px 0px rgba(255,255,255,0.7),
+    990px 360px 1px 0px rgba(255,255,255,0.5),
+    1100px 300px 1px 0px rgba(255,255,255,0.6),
+    100px 400px 1px 0px rgba(255,255,255,0.3),
+    320px 420px 1px 0px rgba(255,255,255,0.5),
+    560px 390px 1px 0px rgba(255,255,255,0.7),
+    780px 440px 1px 0px rgba(255,255,255,0.4),
+    1000px 410px 1px 0px rgba(255,255,255,0.6),
+    1220px 380px 1px 0px rgba(255,255,255,0.5),
+    80px 480px 1px 0px rgba(255,255,255,0.3),
+    290px 520px 1px 0px rgba(255,255,255,0.6),
+    510px 460px 1px 0px rgba(255,255,255,0.5),
+    730px 540px 1px 0px rgba(255,255,255,0.7),
+    950px 490px 1px 0px rgba(255,255,255,0.4),
+    1150px 530px 1px 0px rgba(255,255,255,0.6),
+    170px 580px 1px 0px rgba(255,255,255,0.5),
+    400px 560px 1px 0px rgba(255,255,255,0.3),
+    640px 600px 1px 0px rgba(255,255,255,0.7),
+    870px 570px 1px 0px rgba(255,255,255,0.5),
+    1080px 620px 1px 0px rgba(255,255,255,0.4);
+  animation: starsTwinkle 4s ease-in-out infinite alternate;
+}
+
+@keyframes starsTwinkle {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+/* Туман */
+.fog {
+  position: absolute;
+  bottom: 0;
+  left: -50%;
+  width: 200%;
+  height: 250px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(100, 100, 140, 0.04) 20%,
+    rgba(100, 100, 140, 0.08) 50%,
+    rgba(100, 100, 140, 0.04) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.fog-1 {
+  animation: fogDrift1 25s linear infinite;
+  opacity: 0.6;
+}
+
+.fog-2 {
+  animation: fogDrift2 35s linear infinite;
+  opacity: 0.4;
+  height: 180px;
+  bottom: 40px;
+}
+
+@keyframes fogDrift1 {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(25%); }
+}
+
+@keyframes fogDrift2 {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-25%); }
+}
+
+/* Силуэт города */
+.city-silhouette {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: var(--bg-dark);
+  clip-path: polygon(
+    0% 100%,
+    0% 75%, 2% 75%, 2% 55%, 4% 55%, 4% 70%, 6% 70%, 6% 45%, 7% 45%, 7% 40%, 9% 40%, 9% 45%, 10% 45%, 10% 65%,
+    12% 65%, 12% 50%, 13% 50%, 13% 35%, 14% 25%, 15% 35%, 16% 50%, 17% 50%, 17% 60%,
+    19% 60%, 19% 55%, 21% 55%, 21% 40%, 22% 40%, 22% 30%, 23% 20%, 24% 30%, 25% 40%, 26% 55%,
+    28% 55%, 28% 45%, 29% 45%, 29% 50%, 31% 50%, 31% 60%, 33% 60%, 33% 50%, 34% 50%, 34% 35%, 35% 35%, 35% 55%,
+    37% 55%, 37% 65%, 39% 65%, 39% 45%, 40% 45%, 40% 30%, 41% 15%, 42% 30%, 43% 45%, 44% 60%,
+    46% 60%, 46% 50%, 48% 50%, 48% 55%, 50% 55%, 50% 40%, 51% 40%, 51% 50%, 53% 50%, 53% 65%,
+    55% 65%, 55% 50%, 56% 50%, 56% 35%, 57% 25%, 58% 35%, 59% 50%, 60% 60%,
+    62% 60%, 62% 45%, 63% 45%, 63% 55%, 65% 55%, 65% 70%, 67% 70%, 67% 50%, 68% 50%, 68% 40%, 69% 40%, 69% 55%,
+    71% 55%, 71% 60%, 73% 60%, 73% 45%, 74% 45%, 74% 30%, 75% 20%, 76% 30%, 77% 45%, 78% 55%,
+    80% 55%, 80% 50%, 82% 50%, 82% 60%, 84% 60%, 84% 50%, 85% 50%, 85% 35%, 86% 35%, 86% 55%,
+    88% 55%, 88% 65%, 90% 65%, 90% 55%, 91% 55%, 91% 40%, 92% 40%, 92% 50%, 94% 50%, 94% 70%,
+    96% 70%, 96% 55%, 97% 55%, 97% 60%, 99% 60%, 99% 75%, 100% 75%, 100% 100%
+  );
+  opacity: 0.7;
+}
+
+/* Окна зданий */
+.city-windows {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background-image:
+    radial-gradient(circle 1.5px at 3% 58%, rgba(255,220,100,0.6) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 3% 65%, rgba(255,220,100,0.4) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 7% 50%, rgba(255,220,100,0.5) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 14% 35%, rgba(255,220,100,0.6) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 14% 42%, rgba(255,220,100,0.3) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 23% 28%, rgba(255,220,100,0.5) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 23% 35%, rgba(255,220,100,0.6) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 34% 40%, rgba(255,220,100,0.4) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 41% 25%, rgba(255,220,100,0.6) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 41% 35%, rgba(255,220,100,0.5) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 50% 45%, rgba(255,220,100,0.4) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 57% 32%, rgba(255,220,100,0.6) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 57% 42%, rgba(255,220,100,0.3) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 68% 45%, rgba(255,220,100,0.5) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 75% 28%, rgba(255,220,100,0.6) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 75% 38%, rgba(255,220,100,0.4) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 85% 40%, rgba(255,220,100,0.5) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 92% 48%, rgba(255,220,100,0.6) 0%, transparent 100%);
+  animation: windowsFlicker 6s ease-in-out infinite alternate;
+}
+
+@keyframes windowsFlicker {
+  0% { opacity: 0.8; }
+  30% { opacity: 0.6; }
+  60% { opacity: 0.9; }
+  100% { opacity: 0.7; }
+}
+
+/* Виньетка */
+.vignette {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.6) 100%);
+}
+
+/* === Экраны === */
+.screen {
+  display: none;
+  position: relative;
+  z-index: 1;
+}
+
+.screen.active {
+  display: block;
+  animation: screenEnter 0.6s ease-out;
+}
+
+.screen.screen-exit {
+  animation: screenExit 0.4s ease-in forwards;
+}
+
+@keyframes screenEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes screenExit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.98);
+  }
+}
+
+/* === Красная вспышка при убийстве === */
+.red-flash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center, rgba(196,30,58,0.4) 0%, rgba(139,0,0,0.2) 50%, transparent 100%);
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.red-flash.active {
+  animation: redFlash 0.8s ease-out forwards;
+}
+
+@keyframes redFlash {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Тряска экрана */
+.screen-shake {
+  animation: screenShake 0.5s ease-out;
+}
+
+@keyframes screenShake {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-4px, 2px); }
+  20% { transform: translate(4px, -2px); }
+  30% { transform: translate(-3px, -1px); }
+  40% { transform: translate(3px, 1px); }
+  50% { transform: translate(-2px, 2px); }
+  60% { transform: translate(2px, -1px); }
+  70% { transform: translate(-1px, 1px); }
+  80% { transform: translate(1px, 0px); }
+}
+
+/* === Главное меню === */
+#menu-screen {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+}
+
+#menu-screen.active {
+  display: flex;
+}
+
+/* Логотип */
+.logo {
+  margin-bottom: 50px;
+}
+
+.logo-emblem {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  border: 3px solid var(--accent-red);
+  position: relative;
+  box-shadow: 0 0 20px rgba(196, 30, 58, 0.3), inset 0 0 20px rgba(196, 30, 58, 0.1);
+}
+
+.logo-emblem::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: var(--accent-red);
+  transform: translateY(-50%);
+}
+
+.logo-emblem::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  bottom: 10%;
+  width: 2px;
+  background: var(--accent-red);
+  transform: translateX(-50%);
+}
+
+.logo h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 5rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: var(--accent-red);
+  text-shadow:
+    0 0 40px rgba(196, 30, 58, 0.5),
+    0 0 80px rgba(196, 30, 58, 0.2),
+    0 4px 8px rgba(0, 0, 0, 0.5);
+  margin-bottom: 10px;
+}
+
+.logo-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 15px 0;
+  position: relative;
+}
+
+.logo-divider::before,
+.logo-divider::after {
+  content: '';
+  flex: 1;
+  max-width: 120px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--accent-gold), transparent);
+}
+
+.logo-divider span {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-gold);
+  transform: rotate(45deg);
+  margin: 0 12px;
+  flex-shrink: 0;
+}
+
+.tagline {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+.menu-form {
+  width: 100%;
+  max-width: 400px;
+}
+
+.menu-form input {
+  width: 100%;
+  padding: 16px 20px;
+  font-size: 1.1rem;
+  background: rgba(18, 18, 26, 0.8);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  backdrop-filter: blur(4px);
+}
+
+.menu-form input:focus {
+  outline: none;
+  border-color: var(--accent-red);
+  box-shadow: 0 0 20px rgba(196, 30, 58, 0.2);
+}
+
+.menu-form input::placeholder {
+  color: var(--text-secondary);
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.join-section {
+  display: flex;
+  gap: 10px;
+}
+
+.join-section input {
+  flex: 1;
+  margin-bottom: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  text-align: center;
+}
+
+/* === Кнопки === */
+.btn {
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-red), #8b0000);
+  color: white;
+  box-shadow: 0 4px 15px rgba(196, 30, 58, 0.4);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--accent-red-hover), #a00000);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(196, 30, 58, 0.5);
+}
+
+.btn-secondary {
+  background: rgba(18, 18, 26, 0.8);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-red);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, var(--accent-red), #8b0000);
+  color: white;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-loading {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.btn-large {
+  padding: 18px 40px;
+  font-size: 1.2rem;
+}
+
+.btn-icon {
+  font-size: 1.4rem;
+  font-weight: 300;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 1rem;
+  text-decoration: underline;
+  transition: color 0.3s;
+}
+
+.btn-link:hover {
+  color: var(--accent-gold);
+}
+
+.btn-icon-only {
+  background: rgba(18, 18, 26, 0.8);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.3s;
+}
+
+.btn-icon-only:hover {
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
+}
+
+.rules-hint {
+  margin-top: 40px;
+}
+
+/* === Пульсирующая зелёная кнопка (фаза готова) === */
+.btn.phase-ready-pulse {
+  animation: greenPulse 1.5s ease-in-out infinite;
+  background: linear-gradient(135deg, var(--accent-green), #1a8a4a) !important;
+  box-shadow: 0 0 20px rgba(46, 204, 113, 0.4);
+}
+
+@keyframes greenPulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(46, 204, 113, 0.3); }
+  50% { box-shadow: 0 0 30px rgba(46, 204, 113, 0.6), 0 0 60px rgba(46, 204, 113, 0.2); }
+}
+
+/* === Лобби === */
+#lobby-screen {
+  padding: 0;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+#lobby-screen.active {
+  display: flex;
+}
+
+/* Скрыть атмосферу в лобби для визуального отделения */
+body[data-phase="lobby"] .atmosphere {
+  opacity: 0.3;
+  transition: opacity 1s ease;
+}
+
+/* Topbar */
+.lobby-topbar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 16px 20px;
+  background: rgba(10, 10, 20, 0.6);
+  border-bottom: 1px solid var(--border-color);
+  backdrop-filter: blur(8px);
+}
+
+.lobby-topbar-title {
+  flex: 1;
+  text-align: center;
+}
+
+.lobby-topbar-title h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.lobby-topbar-title span {
+  color: var(--accent-gold);
+  letter-spacing: 0.2em;
+}
+
+.lobby-role-badge {
+  font-size: 0.85rem;
+  padding: 4px 12px;
+  border-radius: 12px;
+  margin-top: 6px;
+  letter-spacing: normal;
+}
+
+.lobby-role-badge.narrator {
+  background: rgba(155, 89, 182, 0.2);
+  border: 1px solid var(--narrator-color);
+  color: var(--narrator-color);
+}
+
+.lobby-role-badge.player {
+  background: rgba(74, 144, 217, 0.2);
+  border: 1px solid var(--accent-blue);
+  color: var(--accent-blue);
+}
+
+/* Tabs */
+.lobby-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  background: rgba(10, 10, 20, 0.4);
+  padding: 0 20px;
+}
+
+.lobby-tab {
+  flex: 1;
+  padding: 14px 10px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-align: center;
+}
+
+.lobby-tab:hover {
+  color: var(--text-primary);
+}
+
+.lobby-tab.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--accent-red);
+}
+
+/* Tab content */
+.lobby-tab-content {
+  display: none;
+  flex: 1;
+  padding: 20px;
+  animation: tabFadeIn 0.3s ease-out;
+  overflow-y: auto;
+}
+
+.lobby-tab-content.active {
+  display: block;
+}
+
+@keyframes tabFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Rules in lobby */
+#tab-rules .rules-section {
+  background: rgba(18, 18, 26, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+}
+
+#tab-rules .rules-section h3 {
+  color: var(--accent-gold);
+  margin-bottom: 10px;
+}
+
+#tab-rules .rules-section p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Characters grid */
+.characters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 15px;
+}
+
+.character-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  background: rgba(18, 18, 26, 0.6);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid;
+  border-radius: 0 12px 12px 0;
+  padding: 20px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.character-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.character-card.mafia { border-left-color: var(--mafia-color); }
+.character-card.godfather { border-left-color: var(--godfather-color); }
+.character-card.maniac { border-left-color: var(--maniac-color); }
+.character-card.doctor { border-left-color: var(--doctor-color); }
+.character-card.detective { border-left-color: var(--detective-color); }
+.character-card.civilian { border-left-color: var(--civilian-color); }
+
+.character-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.character-info strong {
+  display: block;
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+
+.character-info p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.host-controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.btn-close-room {
+  border-color: var(--accent-red) !important;
+  color: var(--accent-red) !important;
+}
+
+/* Настройка ролей */
+.role-config {
+  background: rgba(18, 18, 26, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.role-config h3 {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  margin-bottom: 15px;
+}
+
+.role-config-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.role-config-row:last-child {
+  border-bottom: none;
+}
+
+.role-config-label {
+  font-size: 1rem;
+}
+
+.role-config-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.role-config-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: rgba(18, 18, 26, 0.8);
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.role-config-btn:hover {
+  border-color: var(--accent-red);
+  background: rgba(196, 30, 58, 0.2);
+}
+
+.role-config-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  min-width: 24px;
+  text-align: center;
+}
+
+.civilian-auto {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.players-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.player-card {
+  background: rgba(18, 18, 26, 0.8);
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent,
+    transparent 20px,
+    rgba(255, 255, 255, 0.01) 20px,
+    rgba(255, 255, 255, 0.01) 40px
+  );
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: all 0.3s;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.player-card:hover {
+  border-color: var(--accent-red);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.player-card.bot {
+  border-color: var(--accent-blue);
+  border-style: dashed;
+}
+
+.player-card.bot .player-avatar {
+  background: linear-gradient(135deg, var(--accent-blue), #2c5a8f);
+}
+
+.player-avatar {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, var(--accent-red), #8b0000);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.player-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.player-name {
+  font-weight: 500;
+  font-size: 1.1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-status {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.remove-bot-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(196, 30, 58, 0.3);
+  border: 1px solid var(--accent-red);
+  color: var(--accent-red);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  line-height: 1;
+}
+
+.remove-bot-btn:hover {
+  background: var(--accent-red);
+  color: white;
+}
+
+/* Рубашка карты справа от игрока */
+.player-face-card {
+  width: 36px;
+  height: 50px;
+  background: linear-gradient(145deg, #1a1020, #2a1a3a);
+  border: 2px solid var(--accent-gold);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 4px,
+      rgba(212, 175, 55, 0.08) 4px,
+      rgba(212, 175, 55, 0.08) 8px
+    );
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+  transform: rotate(3deg);
+}
+
+.player-face-card span {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  opacity: 0.6;
+}
+
+.lobby-footer {
+  text-align: center;
+}
+
+.player-count {
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+/* === Игровой экран === */
+#game-screen {
+  flex-direction: column;
+  height: 100vh;
+  padding: 20px;
+}
+
+#game-screen.active {
+  display: flex;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.phase-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.phase-icon {
+  font-size: 2rem;
+}
+
+.role-badge {
+  background: rgba(18, 18, 26, 0.8);
+  border: 2px solid var(--border-color);
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.role-badge:hover {
+  transform: scale(1.05);
+}
+
+.role-badge.mafia { border-color: var(--mafia-color); color: var(--mafia-color); }
+.role-badge.godfather { border-color: var(--godfather-color); color: var(--godfather-color); }
+.role-badge.maniac { border-color: var(--maniac-color); color: var(--maniac-color); }
+.role-badge.doctor { border-color: var(--doctor-color); color: var(--doctor-color); }
+.role-badge.detective { border-color: var(--detective-color); color: var(--detective-color); }
+.role-badge.civilian { border-color: var(--civilian-color); color: var(--civilian-color); }
+
+.role-badge.narrator {
+  border-color: var(--narrator-color);
+  color: var(--narrator-color);
+  cursor: default;
+}
+.role-badge.narrator:hover { transform: none; }
+
+.game-message {
+  background: rgba(18, 18, 26, 0.8);
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent,
+    transparent 20px,
+    rgba(255, 255, 255, 0.01) 20px,
+    rgba(255, 255, 255, 0.01) 40px
+  );
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 0 0 0 rgba(196, 30, 58, 0.2); }
+  50% { box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 0 20px 5px rgba(196, 30, 58, 0.1); }
+}
+
+.game-content {
+  display: grid;
+  grid-template-columns: 300px 1fr 140px;
+  gap: 20px;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Карта роли на столе */
+.my-card-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding-top: 20px;
+}
+
+.my-card-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+}
+
+.my-card-scene {
+  perspective: 800px;
+  width: 100px;
+  height: 140px;
+}
+
+.my-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+.my-card-inner.peeked {
+  transform: rotateY(180deg);
+}
+
+.my-card-front,
+.my-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.5);
+}
+
+.my-card-front {
+  transform: rotateY(180deg);
+  padding: 10px 8px;
+  gap: 6px;
+}
+
+.my-card-inner.mafia .my-card-front {
+  background: linear-gradient(145deg, #2a0a10, #4a1020, #2a0a10);
+  border: 2px solid var(--mafia-color);
+}
+.my-card-inner.godfather .my-card-front {
+  background: linear-gradient(145deg, #1a0508, #3a0a14, #1a0508);
+  border: 2px solid var(--godfather-color);
+}
+.my-card-inner.maniac .my-card-front {
+  background: linear-gradient(145deg, #2a1500, #4a2800, #2a1500);
+  border: 2px solid var(--maniac-color);
+}
+.my-card-inner.doctor .my-card-front {
+  background: linear-gradient(145deg, #0a2a15, #104a20, #0a2a15);
+  border: 2px solid var(--doctor-color);
+}
+.my-card-inner.detective .my-card-front {
+  background: linear-gradient(145deg, #0a1a2a, #10304a, #0a1a2a);
+  border: 2px solid var(--detective-color);
+}
+.my-card-inner.civilian .my-card-front {
+  background: linear-gradient(145deg, #1a1a20, #2a2a35, #1a1a20);
+  border: 2px solid var(--civilian-color);
+}
+
+.my-card-icon {
+  font-size: 2rem;
+}
+
+.my-card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.my-card-desc {
+  font-size: 0.55rem;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.my-card-back {
+  background: linear-gradient(145deg, #1a1020, #2a1a3a, #1a1020);
+  border: 2px solid var(--accent-gold);
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 5px,
+      rgba(212, 175, 55, 0.06) 5px,
+      rgba(212, 175, 55, 0.06) 10px
+    );
+}
+
+.my-card-question {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  opacity: 0.6;
+}
+
+.my-card-tip {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-align: center;
+  font-style: italic;
+}
+
+/* Секции с красным подчёркиванием заголовков */
+.players-section,
+.narrator-players-section,
+.narrator-log-section {
+  background: rgba(18, 18, 26, 0.8);
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent,
+    transparent 20px,
+    rgba(255, 255, 255, 0.01) 20px,
+    rgba(255, 255, 255, 0.01) 40px
+  );
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  overflow-y: auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.players-section h3,
+.narrator-players-section h3,
+.narrator-log-section h3 {
+  margin-bottom: 15px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding-bottom: 10px;
+  position: relative;
+}
+
+.players-section h3::after,
+.narrator-players-section h3::after,
+.narrator-log-section h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: var(--accent-red);
+}
+
+.players-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.game-player {
+  background: var(--bg-card-hover);
+  border: 2px solid transparent;
+  border-radius: 10px;
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.game-player:hover:not(.dead):not(.selected) {
+  border-color: var(--accent-red);
+}
+
+.game-player.selected {
+  border-color: var(--accent-gold);
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.game-player.dead {
+  opacity: 0.4;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.game-player.is-me {
+  background: rgba(196, 30, 58, 0.1);
+}
+
+.game-player-avatar {
+  width: 36px;
+  height: 36px;
+  background: var(--border-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.game-player-name {
+  flex: 1;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.bot-tag {
+  font-size: 0.7rem;
+  background: var(--accent-blue);
+  color: white;
+  padding: 1px 6px;
+  border-radius: 6px;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+
+.game-player-role {
+  font-size: 0.8rem;
+  padding: 3px 8px;
+  border-radius: 10px;
+  background: var(--border-color);
+}
+
+.game-player-role.mafia { background: var(--mafia-color); }
+.game-player-role.godfather { background: var(--godfather-color); }
+.game-player-role.maniac { background: var(--maniac-color); }
+.game-player-role.doctor { background: var(--doctor-color); }
+.game-player-role.detective { background: var(--detective-color); }
+.game-player-role.civilian { background: var(--civilian-color); }
+
+/* === Чат === */
+.chat-section {
+  background: rgba(18, 18, 26, 0.8);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-message {
+  padding: 10px 15px;
+  border-radius: 10px;
+  max-width: 80%;
+}
+
+.chat-message.system {
+  background: rgba(138, 138, 154, 0.1);
+  color: var(--text-secondary);
+  text-align: center;
+  max-width: 100%;
+  font-style: italic;
+}
+
+.chat-message.chat {
+  background: var(--bg-card-hover);
+  align-self: flex-start;
+}
+
+.chat-message.mafia {
+  background: rgba(196, 30, 58, 0.2);
+  border: 1px solid var(--mafia-color);
+}
+
+.chat-message.narrator {
+  background: rgba(155, 89, 182, 0.2);
+  border: 1px solid var(--narrator-color);
+  max-width: 100%;
+}
+
+.chat-message .sender {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--accent-gold);
+}
+
+.chat-message.mafia .sender {
+  color: var(--mafia-color);
+}
+
+.chat-message .narrator-sender {
+  color: var(--narrator-color);
+}
+
+.chat-input-container {
+  display: flex;
+  gap: 10px;
+  padding: 15px;
+  border-top: 1px solid var(--border-color);
+}
+
+.chat-input-container input {
+  flex: 1;
+  padding: 12px 16px;
+  background: rgba(10, 10, 15, 0.8);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.chat-input-container input:focus {
+  outline: none;
+  border-color: var(--accent-red);
+}
+
+/* === Панель действий === */
+.action-panel {
+  background: rgba(18, 18, 26, 0.8);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.action-panel.hidden {
+  display: none;
+}
+
+#action-hint {
+  color: var(--text-secondary);
+}
+
+/* === Панель ведущего === */
+#narrator-screen {
+  flex-direction: column;
+  height: 100vh;
+  padding: 20px;
+}
+
+#narrator-screen.active {
+  display: flex;
+}
+
+.narrator-content {
+  display: grid;
+  grid-template-columns: 250px 300px 1fr;
+  gap: 20px;
+  flex: 1;
+  min-height: 0;
+}
+
+.narrator-players-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.narrator-player {
+  background: var(--bg-card-hover);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: opacity 0.3s;
+}
+
+.narrator-player.dead {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+.narrator-log-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.narrator-log {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+
+.narrator-log-entry {
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  line-height: 1.4;
+}
+
+.log-time {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  margin-right: 6px;
+}
+
+/* === Карточка роли с 3D анимацией === */
+.role-card-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.role-card-overlay.active {
+  display: flex;
+}
+
+.role-card-scene {
+  perspective: 1000px;
+  width: 280px;
+  height: 400px;
+}
+
+.role-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+.role-card-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.role-card-front,
+.role-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.role-card-front {
+  transform: rotateY(180deg);
+  padding: 40px 30px;
+  gap: 20px;
+}
+
+.role-card-inner.mafia .role-card-front {
+  background: linear-gradient(145deg, #2a0a10, #4a1020, #2a0a10);
+  border: 2px solid var(--mafia-color);
+}
+.role-card-inner.godfather .role-card-front {
+  background: linear-gradient(145deg, #1a0508, #3a0a14, #1a0508);
+  border: 2px solid var(--godfather-color);
+}
+.role-card-inner.maniac .role-card-front {
+  background: linear-gradient(145deg, #2a1500, #4a2800, #2a1500);
+  border: 2px solid var(--maniac-color);
+}
+.role-card-inner.doctor .role-card-front {
+  background: linear-gradient(145deg, #0a2a15, #104a20, #0a2a15);
+  border: 2px solid var(--doctor-color);
+}
+.role-card-inner.detective .role-card-front {
+  background: linear-gradient(145deg, #0a1a2a, #10304a, #0a1a2a);
+  border: 2px solid var(--detective-color);
+}
+.role-card-inner.civilian .role-card-front {
+  background: linear-gradient(145deg, #1a1a20, #2a2a35, #1a1a20);
+  border: 2px solid var(--civilian-color);
+}
+
+.role-card-icon {
+  font-size: 5rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.role-card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.role-card-desc {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.role-card-back {
+  background: linear-gradient(145deg, #1a1020, #2a1a3a, #1a1020);
+  border: 2px solid var(--accent-gold);
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(212, 175, 55, 0.05) 10px,
+      rgba(212, 175, 55, 0.05) 20px
+    );
+}
+
+.role-card-question {
+  font-family: 'Playfair Display', serif;
+  font-size: 8rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  text-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+  animation: questionPulse 2s ease-in-out infinite;
+}
+
+@keyframes questionPulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
+.role-card-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  z-index: 2001;
+}
+
+.role-card-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.role-card-hint {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  animation: fadeInUp 0.5s ease 0.3s both;
+  text-align: center;
+  max-width: 300px;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === Экран результатов === */
+#result-screen {
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+#result-screen.active {
+  display: flex;
+}
+
+.result-content {
+  text-align: center;
+  max-width: 600px;
+}
+
+#result-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+#result-title.mafia-win { color: var(--mafia-color); }
+#result-title.maniac-win { color: var(--maniac-color); }
+#result-title.civilians-win { color: var(--accent-green); }
+
+#result-message {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+}
+
+.final-roles {
+  background: rgba(18, 18, 26, 0.8);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 40px;
+  text-align: left;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.final-roles h3 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#final-players {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.final-player {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: var(--bg-card-hover);
+  border-radius: 8px;
+}
+
+.final-player.dead {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.final-player-role {
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 8px;
+  color: white;
+}
+
+.final-player-role.mafia { background: var(--mafia-color); }
+.final-player-role.godfather { background: var(--godfather-color); }
+.final-player-role.maniac { background: var(--maniac-color); }
+.final-player-role.doctor { background: var(--doctor-color); }
+.final-player-role.detective { background: var(--detective-color); }
+.final-player-role.civilian { background: var(--civilian-color); }
+
+/* === Аватары с изображениями === */
+.player-avatar.avatar-img,
+.player-card.bot .player-avatar.avatar-img,
+.game-player-avatar.avatar-img,
+.final-player-avatar.avatar-img {
+  padding: 0;
+  overflow: hidden;
+  background: transparent !important;
+}
+
+.player-avatar.avatar-img img,
+.game-player-avatar.avatar-img img,
+.final-player-avatar.avatar-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+.player-avatar.avatar-svg,
+.player-card.bot .player-avatar.avatar-svg,
+.game-player-avatar.avatar-svg,
+.final-player-avatar.avatar-svg {
+  padding: 0;
+  overflow: hidden;
+  background: transparent !important;
+}
+
+.player-avatar.avatar-svg svg,
+.game-player-avatar.avatar-svg svg,
+.final-player-avatar.avatar-svg svg {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+}
+
+.final-player-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  background: var(--border-color);
+}
+
+/* === Модальное окно === */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 2rem;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.modal-close:hover {
+  color: var(--text-primary);
+}
+
+/* Модальное подтверждение */
+.confirm-modal-content {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.confirm-modal-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.confirm-modal-content h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.confirm-modal-content p {
+  color: var(--text-secondary);
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.confirm-modal-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.confirm-modal-buttons .btn {
+  min-width: 120px;
+}
+
+.modal-content h2 {
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.rules-section {
+  margin-bottom: 25px;
+}
+
+.rules-section h3 {
+  margin-bottom: 15px;
+  color: var(--accent-gold);
+}
+
+.rules-section .role-card {
+  background: var(--bg-card-hover);
+  border-left: 4px solid;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 0 8px 8px 0;
+}
+
+.rules-section .role-card.mafia { border-color: var(--mafia-color); }
+.rules-section .role-card.godfather { border-color: var(--godfather-color); }
+.rules-section .role-card.maniac { border-color: var(--maniac-color); }
+.rules-section .role-card.doctor { border-color: var(--doctor-color); }
+.rules-section .role-card.detective { border-color: var(--detective-color); }
+.rules-section .role-card.civilian { border-color: var(--civilian-color); }
+
+.rules-section .role-card strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.rules-section .role-card p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* === Уведомления === */
+.notification {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: rgba(18, 18, 26, 0.95);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 15px 30px;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transition: all 0.3s;
+  z-index: 1001;
+  backdrop-filter: blur(10px);
+}
+
+.notification.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.notification.error {
+  border-color: var(--accent-red);
+  color: var(--accent-red);
+}
+
+.notification.success {
+  border-color: var(--accent-green);
+  color: var(--accent-green);
+}
+
+/* === Overlay переподключения === */
+.reconnect-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+}
+
+.reconnect-overlay.active {
+  display: flex;
+}
+
+.reconnect-content {
+  text-align: center;
+}
+
+.reconnect-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--border-color);
+  border-top-color: var(--accent-red);
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  animation: reconnectSpin 1s linear infinite;
+}
+
+@keyframes reconnectSpin {
+  to { transform: rotate(360deg); }
+}
+
+.reconnect-text {
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.reconnect-hint {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* === Скроллбар === */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(10, 10, 15, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3a3a4a;
+  border-radius: 4px;
+}
+
+/* === Индикатор соединения === */
+.connection-indicator {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 999;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 20px;
+  background: rgba(10, 10, 15, 0.7);
+  border: 1px solid var(--border-color);
+  cursor: default;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.connection-indicator.active {
+  display: flex;
+}
+
+.connection-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  transition: background 0.3s;
+}
+
+.connection-dot.good { background: var(--accent-green); }
+.connection-dot.medium { background: #f39c12; }
+.connection-dot.poor { background: var(--accent-red); }
+
+/* === Reduced motion === */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  /* 3D карточки — flat при reduced motion */
+  .role-card-inner,
+  .my-card-inner {
+    transform-style: flat !important;
+  }
+  .role-card-inner.flipped,
+  .my-card-inner.peeked {
+    transform: none !important;
+  }
+  .role-card-inner.flipped .role-card-front,
+  .my-card-inner.peeked .my-card-front {
+    visibility: visible;
+    backface-visibility: visible;
+    transform: none;
+  }
+  .role-card-inner.flipped .role-card-back,
+  .my-card-inner.peeked .my-card-back {
+    visibility: hidden;
+  }
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-red);
+}
+
+/* === Адаптивность === */
+@media (max-width: 1024px) {
+  .narrator-content {
+    grid-template-columns: 1fr 1fr;
+  }
+  .narrator-content .chat-section {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Мобильные вкладки игрового экрана (скрыты на десктопе) */
+.game-mobile-tabs {
+  display: none;
+}
+
+/* Мобильные вкладки ведущего (скрыты на десктопе) */
+.narrator-mobile-tabs {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .logo h1 {
+    font-size: 2.8rem;
+    letter-spacing: 0.15em;
+  }
+
+  .logo-emblem {
+    width: 60px;
+    height: 60px;
+  }
+
+  /* Игровой экран на мобильных */
+  #game-screen {
+    height: auto;
+    min-height: 100vh;
+    padding: 10px;
+  }
+
+  .game-header {
+    margin-bottom: 10px;
+  }
+
+  .game-message {
+    margin-bottom: 10px;
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+
+  /* Мобильные вкладки */
+  .game-mobile-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(10, 10, 20, 0.4);
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+    margin-bottom: 0;
+  }
+
+  .game-mobile-tab {
+    flex: 1;
+    padding: 10px 8px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    min-height: 44px;
+    font-size: 1rem;
+  }
+
+  .game-mobile-tab.active {
+    color: var(--text-primary);
+    border-bottom-color: var(--accent-red);
+  }
+
+  .game-content {
+    grid-template-columns: 1fr;
+    flex: 1;
+  }
+
+  /* Скрываем неактивную панель */
+  .game-content [data-game-panel] {
+    display: none;
+  }
+
+  .game-content [data-game-panel].mobile-active {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .players-section {
+    max-height: none;
+    min-height: 250px;
+    flex: 1;
+    border-radius: 0 0 12px 12px;
+  }
+
+  .chat-section {
+    min-height: 300px;
+    flex: 1;
+    border-radius: 0 0 12px 12px;
+  }
+
+  .my-card-section {
+    flex-direction: row;
+    justify-content: center;
+    padding: 8px 0;
+    order: -1;
+    gap: 12px;
+  }
+
+  .my-card-scene {
+    width: 60px;
+    height: 85px;
+  }
+
+  .my-card-label {
+    font-size: 0.7rem;
+  }
+
+  .my-card-tip {
+    display: none;
+  }
+
+  /* D) Шрифты карточки роли на мобилке */
+  .my-card-desc {
+    display: none;
+  }
+
+  .my-card-icon {
+    font-size: 1.5rem;
+  }
+
+  .action-panel {
+    flex-wrap: wrap;
+    padding: 12px;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  /* A) Touch targets min 44px */
+  .role-config-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .remove-bot-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 1.3rem;
+  }
+
+  .lobby-tab {
+    font-size: 0.9rem;
+    padding: 14px 8px;
+    min-height: 44px;
+  }
+
+  /* E) Мобильные вкладки ведущего */
+  .narrator-mobile-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(10, 10, 20, 0.4);
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+    margin-bottom: 0;
+  }
+
+  .narrator-mobile-tab {
+    flex: 1;
+    padding: 10px 8px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    min-height: 44px;
+  }
+
+  .narrator-mobile-tab.active {
+    color: var(--text-primary);
+    border-bottom-color: var(--narrator-color);
+  }
+
+  /* Ведущий — панели */
+  .narrator-content {
+    grid-template-columns: 1fr;
+  }
+
+  .narrator-content .chat-section {
+    grid-column: auto;
+  }
+
+  .narrator-content [data-narrator-panel] {
+    display: none;
+  }
+
+  .narrator-content [data-narrator-panel].mobile-active {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .narrator-players-section,
+  .narrator-log-section {
+    max-height: none;
+    min-height: 250px;
+    flex: 1;
+    border-radius: 0 0 12px 12px;
+  }
+
+  /* Карточка роли */
+  .role-card-scene {
+    width: 240px;
+    height: 340px;
+  }
+
+  .role-card-icon {
+    font-size: 3.5rem;
+  }
+
+  .role-card-title {
+    font-size: 1.4rem;
+  }
+
+  .role-card-question {
+    font-size: 6rem;
+  }
+
+  /* Лобби */
+  .lobby-topbar-title h2 {
+    font-size: 1.2rem;
+  }
+
+  .characters-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* F) Экран результатов */
+  #result-title {
+    font-size: 2rem;
+  }
+
+  #final-players {
+    grid-template-columns: 1fr;
+  }
+
+  /* G) Чат-инпут на узких экранах */
+  .chat-input-container input {
+    min-width: 0;
+    font-size: 0.9rem;
+  }
+
+  .chat-input-container .btn {
+    padding: 10px 14px;
+    white-space: nowrap;
+  }
+
+  /* Сниженная атмосфера на мобильных */
+  .stars {
+    opacity: 0.5;
+  }
+
+  .city-silhouette {
+    height: 100px;
+  }
+
+  .city-windows {
+    height: 100px;
+  }
+
+  .fog {
+    opacity: 0.3;
+  }
+
+  .fog-2 {
+    display: none;
+  }
+}
+
+/* B) Hover → только для устройств с hover */
+@media (hover: none) {
+  .player-card:hover {
+    transform: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    border-color: var(--border-color);
+  }
+
+  .character-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    background: rgba(18, 18, 26, 0.8);
+    border-color: var(--border-color);
+  }
+
+  .game-player:hover:not(.dead):not(.selected) {
+    border-color: transparent;
+  }
+
+  .role-badge:hover {
+    transform: none;
+  }
+
+  .role-config-btn:hover {
+    border-color: var(--border-color);
+    background: rgba(18, 18, 26, 0.8);
+  }
+}
+
+/* C) :active состояния для тач-фидбека */
+.btn-primary:active:not(:disabled) {
+  transform: scale(0.96);
+  filter: brightness(0.85);
+}
+
+.btn-secondary:active:not(:disabled) {
+  transform: scale(0.96);
+  filter: brightness(0.85);
+}
+
+.game-player:active:not(.dead) {
+  transform: scale(0.97);
+  filter: brightness(0.9);
+}
+
+.role-config-btn:active {
+  transform: scale(0.9);
+  filter: brightness(0.85);
+}
+
+.lobby-tab:active,
+.game-mobile-tab:active,
+.narrator-mobile-tab:active {
+  filter: brightness(0.8);
+}
+
+/* H) Сверхмалые экраны (<375px) */
+@media (max-width: 374px) {
+  .logo h1 {
+    font-size: 2.2rem;
+  }
+
+  .logo-emblem {
+    width: 50px;
+    height: 50px;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  .btn {
+    padding: 12px 20px;
+    font-size: 0.9rem;
+  }
+
+  .btn-large {
+    padding: 14px 28px;
+    font-size: 1rem;
+  }
+
+  .menu-form input {
+    padding: 14px 16px;
+    font-size: 1rem;
+  }
+
+  .lobby-topbar {
+    padding: 12px 10px;
+    gap: 8px;
+  }
+
+  .lobby-topbar-title h2 {
+    font-size: 1rem;
+  }
+}
